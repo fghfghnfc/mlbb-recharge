@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MLBB Diamond Recharge</title>
+  <title>MLBB Diamond Recharge with Wallet</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -43,6 +43,16 @@
     button:hover {
       background: #45a049;
     }
+    .wallet {
+      background: #eafbea;
+      padding: 12px;
+      border: 1px solid #4CAF50;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+      color: #2c662d;
+    }
     footer {
       text-align: center;
       padding: 15px;
@@ -59,6 +69,13 @@
   </header>
 
   <div class="container">
+    <!-- Wallet Balance Section -->
+    <div class="wallet">
+      Wallet Balance: ₹<span id="balance">0</span>
+    </div>
+    <button type="button" onclick="addMoney()">Add ₹100 to Wallet</button>
+
+    <!-- Recharge Form -->
     <form id="rechargeForm">
       <label for="playerId">Player ID:</label>
       <input type="text" id="playerId" placeholder="Enter your MLBB ID" required>
@@ -69,10 +86,10 @@
       <label for="diamonds">Select Diamond Pack:</label>
       <select id="diamonds" required>
         <option value="">-- Select --</option>
-        <option value="86">86 Diamonds - ₹159</option>
-        <option value="172">172 Diamonds - ₹319</option>
-        <option value="257">257 Diamonds - ₹479</option>
-        <option value="514">514 Diamonds - ₹959</option>
+        <option value="159">86 Diamonds - ₹159</option>
+        <option value="319">172 Diamonds - ₹319</option>
+        <option value="479">257 Diamonds - ₹479</option>
+        <option value="959">514 Diamonds - ₹959</option>
       </select>
 
       <button type="button" onclick="recharge()">Recharge Now</button>
@@ -84,15 +101,36 @@
   </footer>
 
   <script>
+    let balance = 0;
+
+    // Add ₹100 to wallet
+    function addMoney() {
+      balance += 100;
+      document.getElementById("balance").innerText = balance;
+      alert("₹100 added to wallet! ✅\nCurrent Balance: ₹" + balance);
+    }
+
+    // Recharge function
     function recharge() {
       let id = document.getElementById("playerId").value;
       let server = document.getElementById("serverId").value;
       let pack = document.getElementById("diamonds").value;
 
-      if(id && server && pack){
-        alert("✅ Recharge Successful!\n\nPlayer ID: " + id + "\nServer: " + server + "\nPack: " + pack);
-      } else {
+      if (!id || !server || !pack) {
         alert("❌ Please fill all details before recharge.");
+        return;
+      }
+
+      let cost = parseInt(pack); // diamond pack ka price
+      if (balance >= cost) {
+        balance -= cost;
+        document.getElementById("balance").innerText = balance;
+        alert("✅ Recharge Successful!\n\nPlayer ID: " + id + 
+              "\nServer: " + server + 
+              "\nCost: ₹" + cost + 
+              "\nRemaining Wallet Balance: ₹" + balance);
+      } else {
+        alert("❌ Not enough balance! Please add money to wallet.");
       }
     }
   </script>
