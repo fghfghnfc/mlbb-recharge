@@ -59,7 +59,7 @@
   </header>
 
   <div class="container">
-    <form>
+    <form id="rechargeForm">
       <label for="playerId">Player ID:</label>
       <input type="text" id="playerId" placeholder="Enter your MLBB ID" required>
 
@@ -75,12 +75,26 @@
         <option value="514">514 Diamonds - ₹959</option>
       </select>
 
-      <button type="button">Recharge Now</button>
+      <button type="button" onclick="recharge()">Recharge Now</button>
     </form>
   </div>
 
   <footer>
     <p>© 2025 MLBB Recharge • All Rights Reserved</p>
   </footer>
+
+  <script>
+    function recharge() {
+      let id = document.getElementById("playerId").value;
+      let server = document.getElementById("serverId").value;
+      let pack = document.getElementById("diamonds").value;
+
+      if(id && server && pack){
+        alert("✅ Recharge Successful!\n\nPlayer ID: " + id + "\nServer: " + server + "\nPack: " + pack);
+      } else {
+        alert("❌ Please fill all details before recharge.");
+      }
+    }
+  </script>
 </body>
 </html>
