@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MLBB Diamond Recharge with Wallet</title>
+  <title>MLBB Diamond Recharge with Wallet & History</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
       text-align: center;
     }
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 30px auto;
       background: #fff;
       padding: 20px;
@@ -52,6 +52,20 @@
       text-align: center;
       font-weight: bold;
       color: #2c662d;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #4CAF50;
+      color: #fff;
     }
     footer {
       text-align: center;
@@ -94,6 +108,23 @@
 
       <button type="button" onclick="recharge()">Recharge Now</button>
     </form>
+
+    <!-- Recharge History -->
+    <h2>Recharge History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Player ID</th>
+          <th>Server</th>
+          <th>Diamonds</th>
+          <th>Price</th>
+          <th>Date & Time</th>
+        </tr>
+      </thead>
+      <tbody id="history">
+        <tr><td colspan="5">No recharges yet</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <footer>
@@ -102,6 +133,7 @@
 
   <script>
     let balance = 0;
+    let historyTable = document.getElementById("history");
 
     // Add ₹100 to wallet
     function addMoney() {
@@ -121,12 +153,34 @@
         return;
       }
 
-      let cost = parseInt(pack); // diamond pack ka price
+      let cost = parseInt(pack); // price
+      let diamonds = "";
+      if (cost === 159) diamonds = "86";
+      if (cost === 319) diamonds = "172";
+      if (cost === 479) diamonds = "257";
+      if (cost === 959) diamonds = "514";
+
       if (balance >= cost) {
         balance -= cost;
         document.getElementById("balance").innerText = balance;
+
+        // add to history table
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${id}</td>
+          <td>${server}</td>
+          <td>${diamonds}</td>
+          <td>₹${cost}</td>
+          <td>${new Date().toLocaleString()}</td>
+        `;
+        if (historyTable.children[0] && historyTable.children[0].children.length === 1) {
+          historyTable.innerHTML = ""; // remove "No recharges yet"
+        }
+        historyTable.appendChild(row);
+
         alert("✅ Recharge Successful!\n\nPlayer ID: " + id + 
               "\nServer: " + server + 
+              "\nDiamonds: " + diamonds + 
               "\nCost: ₹" + cost + 
               "\nRemaining Wallet Balance: ₹" + balance);
       } else {
